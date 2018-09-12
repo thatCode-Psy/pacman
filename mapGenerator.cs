@@ -64,23 +64,23 @@ public class mapGenerator : MonoBehaviour {
 					if(i > 0 && i < board.Count - 1 && tileTypes[i - 1] [j] == 'W' && tileTypes[i + 1] [j] == 'W'){
 						if (j > 0 && tileTypes [i] [j - 1] != 'W') {
 							//Set tile to 14
-							cellScript.SetSprite(14);
+							cellScript.SetSprite(25);
 							continue;
 						}
 						if (j < board[i].Length - 1 && tileTypes [i] [j + 1] != 'W') {
 							//Set tile to 20
-							cellScript.SetSprite(20);
+							cellScript.SetSprite(24);
 							continue;
 						}
 					}if(j > 0 && j < board[i].Length - 1 && tileTypes[i] [j - 1] == 'W' && tileTypes[i] [j + 1] == 'W'){
 						if (i > 0 && tileTypes [i - 1] [j] != 'W') {
 							//Set tile to 25
-							cellScript.SetSprite(25);
+							cellScript.SetSprite(14);
 							continue;
 						}
 						if (i < board.Count - 1 && tileTypes [i + 1] [j] != 'W') {
 							//Set tile to 24
-							cellScript.SetSprite(24);
+							cellScript.SetSprite(20);
 							continue;
 						}
 					}if(i > 0 && j > 0 && tileTypes[i - 1][j] == 'W' && tileTypes[i][j - 1] == 'W'){
@@ -96,21 +96,21 @@ public class mapGenerator : MonoBehaviour {
 					}if(i > 0 && j < board[i].Length - 1 && tileTypes[i - 1][j] == 'W' && tileTypes[i][j + 1] == 'W'){
 						if (i < board.Count - 1 && j > 0 && tileTypes [i + 1] [j] != 'W' && tileTypes [i] [j - 1] != 'W') {
 							//Set tile to 38
-							cellScript.SetSprite(38);
+							cellScript.SetSprite(41);
 							continue;
 						} else {
 							//Set tile to 35
-							cellScript.SetSprite(35);
+							cellScript.SetSprite(36);
 							continue;
 						}
 					}if(i < board.Count - 1 && j > 0 && tileTypes[i + 1][j] == 'W' && tileTypes[i][j - 1] == 'W'){
 						if (i > 0 && j < board[i].Length && tileTypes [i - 1] [j] != 'W' && tileTypes [i] [j + 1] != 'W') {
 							//Set tile to 41
-							cellScript.SetSprite(41);
+							cellScript.SetSprite(38);
 							continue;
 						} else {
 							//Set tile to 36
-							cellScript.SetSprite(36);
+							cellScript.SetSprite(35);
 							continue;
 						}
 					}if(i < board.Count - 1 && j < board[i].Length - 1 && tileTypes[i + 1][j] == 'W' && tileTypes[i][j + 1] == 'W'){

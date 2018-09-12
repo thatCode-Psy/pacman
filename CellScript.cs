@@ -10,7 +10,7 @@ public class CellScript : MonoBehaviour {
 
 
 	// Use this for initialization
-	void Start () {
+	void Awake () {
 		spriteR = GetComponent<SpriteRenderer> ();
 	}
 	
