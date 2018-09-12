@@ -24,35 +24,35 @@ public class MainCharacterMovement : MonoBehaviour {
         {
             direction = 1;
             currVelocity = velocity;
-            transform.rotation = Quaternion.Euler(270, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 90);
         }
         if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
         {
             direction = -1;
             currVelocity = -velocity;
-            transform.rotation = Quaternion.Euler(180, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 180);
         }
         if (Input.GetKeyDown(KeyCode.DownArrow) ||Input.GetKeyDown(KeyCode.S)) {
             direction = 1;
             currVelocity = -velocity;
-            transform.rotation = Quaternion.Euler(90, 0, 0);
+            transform.rotation = Quaternion.Euler(0, 0, 270);
         }
 
 
-        if (velocity != 0) {
+        if (currVelocity != 0) {
             if (direction < 0)
-                transform.position += new Vector3(velocity, 0, 0);
+                transform.position += new Vector3(currVelocity, 0, 0);
             else
-                transform.position += new Vector3(0, velocity, 0);
+                transform.position += new Vector3(0, currVelocity, 0);
         }
         
 	}
     private void OnCollisionEnter2D(Collision2D collision)
     {
         if (direction < 0)
-            transform.position -= new Vector3(velocity, 0, 0);
+            transform.position -= new Vector3(currVelocity/2, 0, 0);
         else
-            transform.position -= new Vector3(0, velocity, 0);
+            transform.position -= new Vector3(0, currVelocity/2, 0);
 
          currVelocity = 0;
     }
