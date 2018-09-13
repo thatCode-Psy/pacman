@@ -13,11 +13,13 @@ public class MainCharacterMovement : MonoBehaviour {
 	void Start () {
         score = 0;
 	}
-	
-	// Update is called once per frame
-	void Update () {
+
+    // Update is called once per frame
+    void Update()
+    {
         //input
-        if (Input.GetKeyDown(KeyCode.R)) {
+        if (Input.GetKeyDown(KeyCode.R))
+        {
             SceneManager.LoadScene(0);
         }
         if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
@@ -38,41 +40,31 @@ public class MainCharacterMovement : MonoBehaviour {
             currVelocity = -velocity;
             transform.rotation = Quaternion.Euler(0, 0, 180);
         }
-        if (Input.GetKeyDown(KeyCode.DownArrow) ||Input.GetKeyDown(KeyCode.S)) {
+        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+        {
             direction = 1;
             currVelocity = -velocity;
             transform.rotation = Quaternion.Euler(0, 0, 270);
         }
 
-
+        if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < .1f && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) < .1f)
+        {
+            GetComponent<Animator>().SetBool("Moving", false);
+        }
+        else {
+            GetComponent<Animator>().SetBool("Moving", true);
+        }
         if (currVelocity != 0)
         {
-            GetComponent<Animator>().SetBool("Moving", true);
             if (direction < 0)
                 GetComponent<Rigidbody2D>().velocity = new Vector3(currVelocity, 0, 0);
             else
-               GetComponent<Rigidbody2D>().velocity = new Vector3(0, currVelocity, 0);
+                GetComponent<Rigidbody2D>().velocity = new Vector3(0, currVelocity, 0);
         }
-        else {
+        else
+        {
             GetComponent<Animator>().SetBool("Moving", false);
         }
-        
-	}
-    private void OnCollisionEnter2D(Collision2D collision)
-    {
-        Vector3 tempPos = this.transform.position - collision.transform.position;
-        tempPos = Vector3.Normalize(tempPos)*15;
-        if (tempPos.x > tempPos.y)
-        {
-            tempPos = new Vector3(tempPos.x, 0, 0);
-        }
-        else {
-            tempPos = new Vector3(0, -tempPos.y, 0);
-        }
-        currVelocity /= 10.0f;
-        transform.position += new Vector3((currVelocity)*tempPos.x, tempPos.y *(currVelocity), 0);
-        currVelocity = 0;
-        GetComponent<Rigidbody2D>().velocity = new Vector3(0, 0, 0);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
