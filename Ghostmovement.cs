@@ -1,16 +1,19 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Animations;
 
 public class Ghostmovement : MonoBehaviour {
     public bool goingHorizontal;
     public Rigidbody2D rb;
     public float speed;
+    public Animator an;
     public bool cooldown;
 	// Use this for initialization
 	void Start () {
         rb = GetComponent<Rigidbody2D>();
         cooldown = false;
+        an = GetComponent<Animator>();
 	}
 	
 	// Update is called once per frame
@@ -26,18 +29,22 @@ public class Ghostmovement : MonoBehaviour {
                     if (Random.Range(0, 1f) > .5f)
                     {
                         rb.velocity = new Vector2(0, speed);
+                        an.SetTrigger("goup");
                     }
                     else
                     {
                         rb.velocity = new Vector2(0, -speed);
+                        an.SetTrigger("godown");
                     }
                 }
                 else if (hit.collider == null)
                 {
                     rb.velocity = new Vector2(0, speed);
+                    an.SetTrigger("goup");
                 }
                 else {
                     rb.velocity = new Vector2(0, -speed);
+                    an.SetTrigger("godown");
                 }
             }
             else {
@@ -49,19 +56,23 @@ public class Ghostmovement : MonoBehaviour {
                     if (Random.Range(0, 1) > .5f)
                     {
                         rb.velocity = new Vector2(speed, 0);
+                        an.SetTrigger("goright");
                     }
                     else
                     {
                         rb.velocity = new Vector2(-speed, 0);
+                        an.SetTrigger("goleft");
                     }
                 }
                 else if (hit.collider== null)
                 {
                     rb.velocity = new Vector2(speed, 0);
+                    an.SetTrigger("goright");
                 }
                 else
                 {
                     rb.velocity = new Vector2(-speed, 0);
+                    an.SetTrigger("goleft");
                 }
             }
         }
