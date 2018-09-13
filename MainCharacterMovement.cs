@@ -70,7 +70,7 @@ public class MainCharacterMovement : MonoBehaviour {
         if (collision.gameObject.tag == "ghost") {
             GetComponent<Animator>().SetBool("Die", true);
         }
-        if (collision.gameObject.tag == "pellet")
+        if (collision.gameObject.tag == "Pellet")
         {
             score++;
             Destroy(collision.gameObject);
