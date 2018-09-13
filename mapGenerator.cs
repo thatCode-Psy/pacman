@@ -16,6 +16,12 @@ public class mapGenerator : MonoBehaviour {
 	public GameObject emptyCell;
 	public GameObject pellet;
 
+	public GameObject pacman;
+	public GameObject blinky;
+	public GameObject inky;
+	public GameObject pinky;
+	public GameObject clyde;
+
 	private List<string> wallTypes;
 	// Use this for initialization
 	void Start () {
