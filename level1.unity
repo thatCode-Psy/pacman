@@ -346,8 +346,8 @@ GameObject:
   - component: {fileID: 520301877}
   - component: {fileID: 520301879}
   - component: {fileID: 520301880}
-  - component: {fileID: 520301881}
   - component: {fileID: 520301882}
+  - component: {fileID: 520301881}
   m_Layer: 0
   m_Name: Pacman
   m_TagString: Untagged
@@ -446,8 +446,8 @@ MonoBehaviour:
   direction: 0
   currVelocity: 0
   score: 0
---- !u!61 &520301881
-BoxCollider2D:
+--- !u!58 &520301881
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
@@ -458,19 +458,9 @@ BoxCollider2D:
   m_IsTrigger: 0
   m_UsedByEffector: 0
   m_UsedByComposite: 0
-  m_Offset: {x: -0.004274234, y: -0.0032102317}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.16}
-    newSize: {x: 0.16, y: 0.16}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
+  m_Offset: {x: 0, y: -0.0017300936}
   serializedVersion: 2
-  m_Size: {x: 0.045982555, y: 0.04666631}
-  m_EdgeRadius: 0
+  m_Radius: 0.033285893
 --- !u!50 &520301882
 Rigidbody2D:
   serializedVersion: 4
