@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using UnityEngine.Animations;
 
 public class MainCharacterMovement : MonoBehaviour {
     public float velocity;

@@ -193,7 +193,7 @@ public class mapGenerator : MonoBehaviour {
 		downWalls.Add ("NWI");
 		downWalls.Add ("NEO");
 		downWalls.Add ("NEI");
-		while (uncheckedX.Count > 0) {
+		/*while (uncheckedX.Count > 0) {
 			int j = uncheckedX [index];
 			int i = uncheckedY [index];
 			CellScript cellScript = board [i] [j].GetComponent<CellScript> ();
@@ -221,6 +221,6 @@ public class mapGenerator : MonoBehaviour {
 					continue;
 				}
 			}
-		}
+		}*/
 	}
 }
