@@ -67,13 +67,17 @@ public class MainCharacterMovement : MonoBehaviour {
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.tag == "ghost") {
-            GetComponent<Animator>().SetBool("Die", true);
-        }
         if (collision.gameObject.tag == "Pellet")
         {
             score++;
             Destroy(collision.gameObject);
+        }
+    }
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if (collision.gameObject.tag == "ghost")
+        {
+            GetComponent<Animator>().SetBool("Die", true);
         }
     }
 }
