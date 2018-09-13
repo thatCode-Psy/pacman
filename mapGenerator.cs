@@ -37,30 +37,27 @@ public class mapGenerator : MonoBehaviour {
 				char c = line [i];
 				if (c == 'W') {
 					board [boardHeight] [i] = Instantiate (wall);
-				} 
-				else if (c == '.') {
+				} else if (c == 'G') {
+					board [boardHeight] [i] = Instantiate (wall);
+					CellScript cellScript = board [boardHeight] [i].GetComponent<CellScript> ();
+					cellScript.SetSprite (14);
+				} else if (c == '.') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
 					GameObject pelletSpawned = Instantiate (pellet);
 					pelletSpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
-				}
-				else if (c == ' ') {
+				} else if (c == ' ') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
-				}
-				else if (c == 'I') {
+				} else if (c == 'I') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
-				}
-				else if (c == 'P') {
+				} else if (c == 'P') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
-				}
-				else if (c == 'B') {
+				} else if (c == 'B') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
-				}
-				else if (c == 'C') {
+				} else if (c == 'C') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
-				}
-				else if (c == 'M') {
+				} else if (c == 'M') {
 					board [boardHeight] [i] = Instantiate (emptyCell);
-				}
+				} 
 				board [boardHeight] [i].transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				tileTypes [boardHeight] [i] = c == 'W' || c == 'G' ? "W" : ".";
 			}
@@ -99,7 +96,7 @@ public class mapGenerator : MonoBehaviour {
 							tileTypes [i] [j] = "VL";
 							continue;
 						}
-					} else if (j > 0 && j < board [i].Length - 1 && wallTypes.Contains (tileTypes [i] [j - 1]) && wallTypes.Contains (tileTypes [i] [j + 1])) {
+					} if (j > 0 && j < board [i].Length - 1 && wallTypes.Contains (tileTypes [i] [j - 1]) && wallTypes.Contains (tileTypes [i] [j + 1])) {
 						if (i > 0 && !wallTypes.Contains (tileTypes [i - 1] [j])) {
 							//Set tile to 25
 							cellScript.SetSprite (14);
@@ -112,10 +109,10 @@ public class mapGenerator : MonoBehaviour {
 							tileTypes [i] [j] = "HT";
 							continue;
 						}
-					} else {
-						uncheckedY.Add (i);
-						uncheckedX.Add (j);
 					}
+					uncheckedY.Add (i);
+					uncheckedX.Add (j);
+
 
 					/*if(i > 0 && j > 0 && tileTypes[i - 1][j] == "W" && tileTypes[i][j - 1] == "W"){
 						if (i < board.Count - 1 && j < board [i].Length - 1 && tileTypes [i + 1] [j] != "W" && tileTypes [i] [j + 1] != "W") {
@@ -165,20 +162,21 @@ public class mapGenerator : MonoBehaviour {
 			}
 		}
 		int index = 0;
+		bool changed = false;
 		List<string> rightWalls = new List<string> ();
 		rightWalls.Add ("HB");
 		rightWalls.Add ("HT");
-		rightWalls.Add ("SWO");
-		rightWalls.Add ("SWI");
-		rightWalls.Add ("NWO");
-		rightWalls.Add ("NWI");
+		rightWalls.Add ("SEO");
+		rightWalls.Add ("SEI");
+		rightWalls.Add ("NEO");
+		rightWalls.Add ("NEI");
 		List<string> leftWalls = new List<string> ();
 		leftWalls.Add ("HB");
 		leftWalls.Add ("HT");
-		leftWalls.Add ("SEO");
-		leftWalls.Add ("SEI");
-		leftWalls.Add ("NEO");
-		leftWalls.Add ("NEI");
+		leftWalls.Add ("SWO");
+		leftWalls.Add ("SWI");
+		leftWalls.Add ("NWO");
+		leftWalls.Add ("NWI");
 		List<string> upWalls = new List<string> ();
 		upWalls.Add ("VL");
 		upWalls.Add ("VR");
@@ -193,34 +191,79 @@ public class mapGenerator : MonoBehaviour {
 		downWalls.Add ("NWI");
 		downWalls.Add ("NEO");
 		downWalls.Add ("NEI");
-		/*while (uncheckedX.Count > 0) {
+		while (uncheckedX.Count > 0 && index < uncheckedX.Count) {
 			int j = uncheckedX [index];
 			int i = uncheckedY [index];
 			CellScript cellScript = board [i] [j].GetComponent<CellScript> ();
-			if (i > 0 && j > 0 && upWalls.Contains(tileTypes [i - 1] [j]) && leftWalls.Contains(tileTypes [i] [j - 1])) {
+			if (i > 0 && j > 0 && ((upWalls.Contains (tileTypes [i - 1] [j]) && leftWalls.Contains (tileTypes [i] [j - 1]))
+				|| (upWalls.Contains (tileTypes [i - 1] [j]) && tileTypes [i] [j - 1] == "W") 
+				|| (tileTypes [i - 1] [j] == "W" && leftWalls.Contains (tileTypes [i] [j - 1])))) {
 				if (i < board.Count - 1 && j < board [i].Length - 1 && tileTypes [i + 1] [j] == "." && tileTypes [i] [j + 1] == ".") {
 					//Set tile to 40
-					cellScript.SetSprite(40);
+					cellScript.SetSprite (40);
 					tileTypes [i] [j] = "NEI";
 
 				} else {
 					//Set tile to 37
-					cellScript.SetSprite(37);
+					cellScript.SetSprite (37);
 					tileTypes [i] [j] = "NEO";
 				}
-				uncheckedX.Remove (index);
-			}
-			else if (i > 0 && j < board [i].Length - 1 &&  upWalls.Contains(tileTypes [i - 1] [j]) && rightWalls.Contains(tileTypes [i] [j + 1])) {
+				changed = true;
+				uncheckedX.RemoveAt (index);
+				uncheckedY.RemoveAt (index);
+			} else if (i > 0 && j < board [i].Length - 1 && ((upWalls.Contains (tileTypes [i - 1] [j]) && rightWalls.Contains (tileTypes [i] [j + 1]))
+				|| (upWalls.Contains (tileTypes [i - 1] [j]) && tileTypes [i] [j + 1] == "W") 
+				|| (tileTypes [i - 1] [j] == "W" && rightWalls.Contains (tileTypes [i] [j + 1])))) {
 				if (i < board.Count - 1 && j > 0 && tileTypes [i + 1] [j] == "." && tileTypes [i] [j - 1] == ".") {
+					//Set tile to 41
+					cellScript.SetSprite (41);
+					tileTypes [i] [j] = "NWI";
+				} else {
+					//Set tile to 36
+					cellScript.SetSprite (36);
+					tileTypes [i] [j] = "NWO";
+				}
+				changed = true;
+				uncheckedX.RemoveAt (index);
+				uncheckedY.RemoveAt (index);
+			} else if (i < board.Count - 1 && j > 0 && ((downWalls.Contains (tileTypes [i + 1] [j]) && leftWalls.Contains (tileTypes [i] [j - 1]))
+				|| (downWalls.Contains (tileTypes [i + 1] [j]) && tileTypes [i] [j - 1] == "W") 
+				|| (tileTypes [i + 1] [j] == "W" && leftWalls.Contains (tileTypes [i] [j - 1])))) {
+				if (i > 0 && j < board [i].Length - 1 && tileTypes [i - 1] [j] == "." && tileTypes [i] [j + 1] == ".") {
 					//Set tile to 38
-					cellScript.SetSprite(41);
-					continue;
+					cellScript.SetSprite (38);
+					tileTypes [i] [j] = "SEI";
 				} else {
 					//Set tile to 35
-					cellScript.SetSprite(36);
-					continue;
+					cellScript.SetSprite (35);
+					tileTypes [i] [j] = "SEO";
 				}
+				changed = true;
+				uncheckedX.RemoveAt (index);
+				uncheckedY.RemoveAt (index);
+			} else if (i < board.Count - 1 && j < board [i].Length - 1 && ((downWalls.Contains (tileTypes [i + 1] [j]) && rightWalls.Contains (tileTypes [i] [j + 1]))
+				|| (downWalls.Contains (tileTypes [i + 1] [j]) && tileTypes [i] [j + 1] == "W") 
+				|| (tileTypes [i + 1] [j] == "W" && rightWalls.Contains (tileTypes [i] [j + 1])))){
+				if (i > 0 && j > 0 && tileTypes [i - 1] [j] == "." && tileTypes [i] [j - 1] == ".") {
+					//Set tile to 39
+					cellScript.SetSprite (39);
+					tileTypes [i] [j] = "SWI";
+				} else {
+					//Set tile to 34
+					cellScript.SetSprite (34);
+					tileTypes [i] [j] = "SWO";
+				}
+				changed = true;
+				uncheckedX.RemoveAt (index);
+				uncheckedY.RemoveAt (index);
+			} else {
+				index++;
+
 			}
-		}*/
+			if (changed && index == uncheckedX.Count) {
+				index = 0;
+				changed = false;
+			}
+		}
 	}
 }
