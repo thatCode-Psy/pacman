@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class mapGenerator : MonoBehaviour {
 
@@ -24,7 +25,7 @@ public class mapGenerator : MonoBehaviour {
 
 	private List<string> wallTypes;
 	// Use this for initialization
-	void Start () {
+	void Begin () {
 		StreamReader inp_strm = new StreamReader (filePath);
 		board = new List<GameObject[]>();
 		tileTypes = new List<string[]> ();
@@ -91,26 +92,26 @@ public class mapGenerator : MonoBehaviour {
 
 					if (i > 0 && i < board.Count - 1 && wallTypes.Contains (tileTypes [i - 1] [j]) && wallTypes.Contains (tileTypes [i + 1] [j])) {
 						if (j > 0 && !wallTypes.Contains (tileTypes [i] [j - 1])) {
-							//Set tile to 14
+							//Set tile to 25
 							cellScript.SetSprite (25);
 							tileTypes [i] [j] = "VR";
 							continue;
 						}
 						if (j < board [i].Length - 1 && !wallTypes.Contains (tileTypes [i] [j + 1])) {
-							//Set tile to 20
+							//Set tile to 24
 							cellScript.SetSprite (24);
 							tileTypes [i] [j] = "VL";
 							continue;
 						}
 					} if (j > 0 && j < board [i].Length - 1 && wallTypes.Contains (tileTypes [i] [j - 1]) && wallTypes.Contains (tileTypes [i] [j + 1])) {
 						if (i > 0 && !wallTypes.Contains (tileTypes [i - 1] [j])) {
-							//Set tile to 25
+							//Set tile to 14
 							cellScript.SetSprite (14);
 							tileTypes [i] [j] = "HB";
 							continue;
 						}
 						if (i < board.Count - 1 && !wallTypes.Contains (tileTypes [i + 1] [j])) {
-							//Set tile to 24
+							//Set tile to 20
 							cellScript.SetSprite (20);
 							tileTypes [i] [j] = "HT";
 							continue;
@@ -118,51 +119,6 @@ public class mapGenerator : MonoBehaviour {
 					}
 					uncheckedY.Add (i);
 					uncheckedX.Add (j);
-
-
-					/*if(i > 0 && j > 0 && tileTypes[i - 1][j] == "W" && tileTypes[i][j - 1] == "W"){
-						if (i < board.Count - 1 && j < board [i].Length - 1 && tileTypes [i + 1] [j] != "W" && tileTypes [i] [j + 1] != "W") {
-							//Set tile to 40
-							cellScript.SetSprite(40);
-							continue;
-						} else {
-							//Set tile to 37
-							cellScript.SetSprite(37);
-							continue;
-						}
-					}if(i > 0 && j < board[i].Length - 1 && tileTypes[i - 1][j] == "W" && tileTypes[i][j + 1] == "W"){
-						if (i < board.Count - 1 && j > 0 && tileTypes [i + 1] [j] != "W" && tileTypes [i] [j - 1] != "W") {
-							//Set tile to 38
-							cellScript.SetSprite(41);
-							continue;
-						} else {
-							//Set tile to 35
-							cellScript.SetSprite(36);
-							continue;
-						}
-					}if(i < board.Count - 1 && j > 0 && tileTypes[i + 1][j] == "W" && tileTypes[i][j - 1] == "W"){
-						if (i > 0 && j < board[i].Length && tileTypes [i - 1] [j] != "W" && tileTypes [i] [j + 1] != "W") {
-							//Set tile to 41
-							cellScript.SetSprite(38);
-							continue;
-						} else {
-							//Set tile to 36
-							cellScript.SetSprite(35);
-							continue;
-						}
-					}if(i < board.Count - 1 && j < board[i].Length - 1 && tileTypes[i + 1][j] == "W" && tileTypes[i][j + 1] == "W"){
-						if (i > 0 && j > 0 && tileTypes [i - 1] [j] != "W" && tileTypes [i] [j - 1] != "W") {
-							//Set tile to 39
-							cellScript.SetSprite(39);
-							continue;
-						} else {
-							//Set tile to 34
-							cellScript.SetSprite(34);
-							continue;
-						}
-					}
-					*/
-
 				}
 
 			}
@@ -271,5 +227,39 @@ public class mapGenerator : MonoBehaviour {
 				changed = false;
 			}
 		}
+	}
+
+	public void ResetGame(){
+		//SceneManager.LoadScene (0);
+		Begin ();
+	}
+
+	void ResetLevel(){
+		StreamReader inp_strm = new StreamReader (filePath);
+		int boardHeight = 0;
+		while (!inp_strm.EndOfStream) {
+			string line = inp_strm.ReadLine ();
+			for (int i = 0; i < line.Length; ++i) {
+				char c = line [i];
+				if (c == '.') {
+					board [boardHeight] [i] = Instantiate (emptyCell);
+					GameObject pelletSpawned = Instantiate (pellet);
+					pelletSpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
+				} else if (c == 'I') {
+					board [boardHeight] [i] = Instantiate (emptyCell);
+				} else if (c == 'P') {
+					board [boardHeight] [i] = Instantiate (emptyCell);
+				} else if (c == 'B') {
+					board [boardHeight] [i] = Instantiate (emptyCell);
+				} else if (c == 'C') {
+					board [boardHeight] [i] = Instantiate (emptyCell);
+				} else if (c == 'M') {
+					board [boardHeight] [i] = Instantiate (emptyCell);
+				} 
+			}
+			++boardHeight;
+
+		}
+		inp_strm.Close ();
 	}
 }
