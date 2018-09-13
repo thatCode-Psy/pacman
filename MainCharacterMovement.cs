@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
+using System.IO;
 
 public class MainCharacterMovement : MonoBehaviour {
     public float velocity;
@@ -9,15 +11,31 @@ public class MainCharacterMovement : MonoBehaviour {
     public float currVelocity;
     public bool dead;
     public int score;
-	// Use this for initialization
-	void Start () {
+    public int highScore;
+    public Text scoreText;
+    public Text scoreText2;
+    // Use this for initialization
+    void Start () {
         dead = false;
+        scoreText = GameObject.FindGameObjectWithTag("scoreText").GetComponent<Text>();
+        scoreText2 = GameObject.FindGameObjectWithTag("scoreText2").GetComponent<Text>();
         score = 0;
-	}
+        GetComponent<CircleCollider2D>().enabled = true;
+        string path = "Assets/highscore.txt";
+        StreamReader reader = new StreamReader(path);
+        highScore = int.Parse(reader.ReadToEnd());
+        scoreText2.text = "Highscore: " +highScore;
+        reader.Close();
+    }
 
     // Update is called once per frame
     void Update()
     {
+        scoreText.text = "Score: " + score;
+        if (score > highScore) {
+            highScore = score;
+            scoreText2.text = scoreText2.text = "Highscore: " + highScore;
+        }
         if (!dead)
         {
             //input
@@ -83,8 +101,13 @@ public class MainCharacterMovement : MonoBehaviour {
     {
         if (collision.gameObject.tag == "ghost")
         {
+            string path = "Assets/highscore.txt";
+            StreamWriter wr = new StreamWriter(path);
+            wr.Write(highScore);
+            wr.Close();
             dead = true;
             GetComponent<Animator>().SetBool("Dead", true);
+            GetComponent<CircleCollider2D>().enabled = false;
         }
     }
 }

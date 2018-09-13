@@ -84,8 +84,13 @@ public class mapGenerator : MonoBehaviour {
 			}
 			boardHeight++;
 		}
+
 		inp_strm.Close();
-		OrientWalls ();
+        string path = "Assets/highscore.txt";
+        StreamWriter wr = new StreamWriter(path);
+        wr.Write(GameObject.FindGameObjectWithTag("pacman").GetComponent<MainCharacterMovement>().score);
+        wr.Close();
+        OrientWalls ();
 
 	}
 	
@@ -251,14 +256,18 @@ public class mapGenerator : MonoBehaviour {
 		if (currLevel != null) {
 			Destroy (currLevel);
 		}
-		Begin ();
+        Begin ();
 	}
 
 	void ResetLevel(){
 		GameObject currLevel = GameObject.FindGameObjectWithTag ("level");
 		GameObject pacmanSpawned = GameObject.FindGameObjectWithTag ("pacman");
 		MainCharacterMovement pacmanScript = pacmanSpawned.GetComponent<MainCharacterMovement> ();
-		int currScore = pacmanScript.score;
+        string path = "Assets/highscore.txt";
+        StreamWriter wr = new StreamWriter(path);
+        wr.Write(GameObject.FindGameObjectWithTag("pacman").GetComponent<MainCharacterMovement>().score);
+        wr.Close();
+        int currScore = pacmanScript.score;
 		Destroy (pacmanSpawned);
 		GameObject[] ghosts = GameObject.FindGameObjectsWithTag ("ghost");
 		foreach (GameObject ghost in ghosts) {
