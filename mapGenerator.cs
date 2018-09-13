@@ -24,9 +24,13 @@ public class mapGenerator : MonoBehaviour {
 	public GameObject clyde;
 
 	private List<string> wallTypes;
+	private bool started = false;
+	public GameObject level;
 	// Use this for initialization
 	void Begin () {
+		GameObject currLevel = Instantiate (level);
 		StreamReader inp_strm = new StreamReader (filePath);
+		started = true;
 		board = new List<GameObject[]>();
 		tileTypes = new List<string[]> ();
 		wallTypes = new List<string>(13);
@@ -43,27 +47,37 @@ public class mapGenerator : MonoBehaviour {
 			for (int i = 0; i < line.Length; ++i) {
 				char c = line [i];
 				if (c == 'W') {
-					board [boardHeight] [i] = Instantiate (wall);
+					board [boardHeight] [i] = Instantiate (wall, currLevel.transform);
 				} else if (c == 'G') {
-					board [boardHeight] [i] = Instantiate (wall);
+					board [boardHeight] [i] = Instantiate (wall, currLevel.transform);
 					CellScript cellScript = board [boardHeight] [i].GetComponent<CellScript> ();
 					cellScript.SetSprite (14);
 				} else if (c == '.') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
-					GameObject pelletSpawned = Instantiate (pellet);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
+					GameObject pelletSpawned = Instantiate (pellet, currLevel.transform);
 					pelletSpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == ' ') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
 				} else if (c == 'I') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
+					GameObject inkySpawned = Instantiate (inky, currLevel.transform);
+					inkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'P') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
+					GameObject pinkySpawned = Instantiate (pinky, currLevel.transform);
+					pinkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'B') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
+					GameObject blinkySpawned = Instantiate (blinky, currLevel.transform);
+					blinkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'C') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
+					GameObject clydeSpawned = Instantiate (clyde, currLevel.transform);
+					clydeSpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'M') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					board [boardHeight] [i] = Instantiate (emptyCell, currLevel.transform);
+					GameObject pacmanSpawned = Instantiate (pacman, currLevel.transform);
+					pacmanSpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} 
 				board [boardHeight] [i].transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				tileTypes [boardHeight] [i] = c == 'W' || c == 'G' ? "W" : ".";
@@ -78,7 +92,7 @@ public class mapGenerator : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		GameObject pellet = GameObject.FindGameObjectWithTag ("Pellet");
-		if (pellet == null) {
+		if (started && pellet == null) {
 			ResetLevel ();
 		}
 	}
@@ -233,18 +247,23 @@ public class mapGenerator : MonoBehaviour {
 	}
 
 	public void ResetGame(){
-		
+		GameObject currLevel = GameObject.FindGameObjectWithTag ("level");
+		if (currLevel != null) {
+			Destroy (currLevel);
+		}
 		Begin ();
 	}
 
 	void ResetLevel(){
-
-		GameObject pacman = GameObject.FindGameObjectWithTag ("pacman");
-		MainCharacterMovement pacmanScript = pacman.GetComponent<MainCharacterMovement> ();
+		GameObject currLevel = GameObject.FindGameObjectWithTag ("level");
+		GameObject pacmanSpawned = GameObject.FindGameObjectWithTag ("pacman");
+		MainCharacterMovement pacmanScript = pacmanSpawned.GetComponent<MainCharacterMovement> ();
 		int currScore = pacmanScript.score;
-
-
-
+		Destroy (pacmanSpawned);
+		GameObject[] ghosts = GameObject.FindGameObjectsWithTag ("ghost");
+		foreach (GameObject ghost in ghosts) {
+			Destroy (ghost);
+		}
 		StreamReader inp_strm = new StreamReader (filePath);
 		int boardHeight = 0;
 
@@ -253,27 +272,31 @@ public class mapGenerator : MonoBehaviour {
 			for (int i = 0; i < line.Length; ++i) {
 				char c = line [i];
 				if (c == '.') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
-					GameObject pelletSpawned = Instantiate (pellet);
+					GameObject pelletSpawned = Instantiate (pellet, currLevel.transform);
 					pelletSpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'I') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					GameObject inkySpawned = Instantiate (inky, currLevel.transform);
+					inkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'P') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					GameObject inkySpawned = Instantiate (pinky, currLevel.transform);
+					inkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'B') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					GameObject inkySpawned = Instantiate (blinky, currLevel.transform);
+					inkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'C') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					GameObject inkySpawned = Instantiate (clyde, currLevel.transform);
+					inkySpawned.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
 				} else if (c == 'M') {
-					board [boardHeight] [i] = Instantiate (emptyCell);
+					
+					GameObject newPacman = Instantiate (pacman, currLevel.transform);
+					newPacman.transform.position = new Vector3 (topLeftX + cellSize * i, topLeftY - cellSize * boardHeight);
+					pacmanScript = newPacman.GetComponent<MainCharacterMovement> ();
+					pacmanScript.score = currScore;
 				} 
 			}
 			++boardHeight;
 
 		}
 		inp_strm.Close ();
-		pacman = GameObject.FindGameObjectWithTag ("pacman");
-		pacmanScript = pacman.GetComponent<MainCharacterMovement> ();
-		pacmanScript.score = currScore;
 	}
 }
