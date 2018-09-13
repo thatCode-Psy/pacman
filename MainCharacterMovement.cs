@@ -7,62 +7,68 @@ public class MainCharacterMovement : MonoBehaviour {
     public float velocity;
     public int direction;
     public float currVelocity;
+    public bool dead;
     public int score;
 	// Use this for initialization
-	void Awake () {
+	void Start () {
+        dead = false;
         score = 0;
 	}
 
     // Update is called once per frame
     void Update()
     {
-        //input
-        if (Input.GetKeyDown(KeyCode.R))
+        if (!dead)
         {
-            SceneManager.LoadScene(0);
-        }
-        if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
-        {
-            direction = -1;
-            currVelocity = velocity;
-            transform.rotation = Quaternion.Euler(0, 0, 0);
-        }
-        if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
-        {
-            direction = 1;
-            currVelocity = velocity;
-            transform.rotation = Quaternion.Euler(0, 0, 90);
-        }
-        if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
-        {
-            direction = -1;
-            currVelocity = -velocity;
-            transform.rotation = Quaternion.Euler(0, 0, 180);
-        }
-        if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
-        {
-            direction = 1;
-            currVelocity = -velocity;
-            transform.rotation = Quaternion.Euler(0, 0, 270);
-        }
+            //input
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                SceneManager.LoadScene(0);
+            }
+            if (Input.GetKeyDown(KeyCode.RightArrow) || Input.GetKeyDown(KeyCode.D))
+            {
+                direction = -1;
+                currVelocity = velocity;
+                transform.rotation = Quaternion.Euler(0, 0, 0);
+            }
+            if (Input.GetKeyDown(KeyCode.UpArrow) || Input.GetKeyDown(KeyCode.W))
+            {
+                direction = 1;
+                currVelocity = velocity;
+                transform.rotation = Quaternion.Euler(0, 0, 90);
+            }
+            if (Input.GetKeyDown(KeyCode.LeftArrow) || Input.GetKeyDown(KeyCode.A))
+            {
+                direction = -1;
+                currVelocity = -velocity;
+                transform.rotation = Quaternion.Euler(0, 0, 180);
+            }
+            if (Input.GetKeyDown(KeyCode.DownArrow) || Input.GetKeyDown(KeyCode.S))
+            {
+                direction = 1;
+                currVelocity = -velocity;
+                transform.rotation = Quaternion.Euler(0, 0, 270);
+            }
 
-        if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < .1f && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) < .1f)
-        {
-            GetComponent<Animator>().SetBool("Moving", false);
-        }
-        else {
-            GetComponent<Animator>().SetBool("Moving", true);
-        }
-        if (currVelocity != 0)
-        {
-            if (direction < 0)
-                GetComponent<Rigidbody2D>().velocity = new Vector3(currVelocity, 0, 0);
+            if (Mathf.Abs(GetComponent<Rigidbody2D>().velocity.x) < .1f && Mathf.Abs(GetComponent<Rigidbody2D>().velocity.y) < .1f)
+            {
+                GetComponent<Animator>().SetBool("Moving", false);
+            }
             else
-                GetComponent<Rigidbody2D>().velocity = new Vector3(0, currVelocity, 0);
-        }
-        else
-        {
-            GetComponent<Animator>().SetBool("Moving", false);
+            {
+                GetComponent<Animator>().SetBool("Moving", true);
+            }
+            if (currVelocity != 0)
+            {
+                if (direction < 0)
+                    GetComponent<Rigidbody2D>().velocity = new Vector3(currVelocity, 0, 0);
+                else
+                    GetComponent<Rigidbody2D>().velocity = new Vector3(0, currVelocity, 0);
+            }
+            else
+            {
+                GetComponent<Animator>().SetBool("Moving", false);
+            }
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -77,7 +83,8 @@ public class MainCharacterMovement : MonoBehaviour {
     {
         if (collision.gameObject.tag == "ghost")
         {
-            GetComponent<Animator>().SetBool("Die", true);
+            dead = true;
+            GetComponent<Animator>().SetBool("Dead", true);
         }
     }
 }
