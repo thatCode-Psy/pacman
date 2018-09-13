@@ -77,7 +77,10 @@ public class mapGenerator : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		
+		GameObject pellet = GameObject.FindGameObjectWithTag ("Pellet");
+		if (pellet == null) {
+			ResetLevel ();
+		}
 	}
 
 	private void OrientWalls(){
@@ -230,13 +233,21 @@ public class mapGenerator : MonoBehaviour {
 	}
 
 	public void ResetGame(){
-		//SceneManager.LoadScene (0);
+		
 		Begin ();
 	}
 
 	void ResetLevel(){
+
+		GameObject pacman = GameObject.FindGameObjectWithTag ("pacman");
+		MainCharacterMovement pacmanScript = pacman.GetComponent<MainCharacterMovement> ();
+		int currScore = pacmanScript.score;
+
+
+
 		StreamReader inp_strm = new StreamReader (filePath);
 		int boardHeight = 0;
+
 		while (!inp_strm.EndOfStream) {
 			string line = inp_strm.ReadLine ();
 			for (int i = 0; i < line.Length; ++i) {
@@ -261,5 +272,8 @@ public class mapGenerator : MonoBehaviour {
 
 		}
 		inp_strm.Close ();
+		pacman = GameObject.FindGameObjectWithTag ("pacman");
+		pacmanScript = pacman.GetComponent<MainCharacterMovement> ();
+		pacmanScript.score = currScore;
 	}
 }
