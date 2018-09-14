@@ -86,10 +86,7 @@ public class mapGenerator : MonoBehaviour {
 		}
 
 		inp_strm.Close();
-        string path = "Assets/highscore.txt";
-        StreamWriter wr = new StreamWriter(path);
-        wr.Write(GameObject.FindGameObjectWithTag("pacman").GetComponent<MainCharacterMovement>().score);
-        wr.Close();
+        /**/
         OrientWalls ();
 
 	}
@@ -254,6 +251,10 @@ public class mapGenerator : MonoBehaviour {
 	public void ResetGame(){
 		GameObject currLevel = GameObject.FindGameObjectWithTag ("level");
 		if (currLevel != null) {
+			string path = "Assets/highscore.txt";
+			StreamWriter wr = new StreamWriter(path);
+			wr.Write(GameObject.FindGameObjectWithTag("pacman").GetComponent<MainCharacterMovement>().score);
+			wr.Close();
 			Destroy (currLevel);
 		}
         Begin ();
